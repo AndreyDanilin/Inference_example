@@ -41,7 +41,8 @@ For the CUDA serving and kernel path:
 
 ```bash
 sudo apt-get update
-sudo apt-get install -y libnuma1
+sudo apt-get install -y libnuma1 nvidia-cuda-toolkit
+nvcc --version
 uv python install 3.12
 uv sync --extra cuda --extra dev
 ```
