@@ -1,6 +1,6 @@
 from pathlib import Path
 
-from inference_lab.hardware import load_hardware_profile, parse_nvidia_smi_csv
+from inference_lab.hardware import load_hardware_profile, parse_cuda_version, parse_nvidia_smi_csv
 
 
 def test_load_hardware_profile_for_8gb_cuda_target() -> None:
@@ -24,3 +24,26 @@ NVIDIA GeForce RTX 4060 Laptop GPU, 552.22, 8188 MiB, 12.4
     assert facts.driver_version == "552.22"
     assert facts.total_memory_mib == 8188
     assert facts.cuda_version == "12.4"
+
+
+def test_parse_nvidia_smi_csv_accepts_query_output_without_cuda_version() -> None:
+    output = """name, driver_version, memory.total [MiB]
+NVIDIA GeForce RTX 4060 Laptop GPU, 595.79, 8188 MiB
+"""
+
+    facts = parse_nvidia_smi_csv(output, cuda_version="13.2")
+
+    assert facts.name == "NVIDIA GeForce RTX 4060 Laptop GPU"
+    assert facts.driver_version == "595.79"
+    assert facts.total_memory_mib == 8188
+    assert facts.cuda_version == "13.2"
+
+
+def test_parse_cuda_version_from_nvidia_smi_banner() -> None:
+    output = """
++-----------------------------------------------------------------------------------------+
+| NVIDIA-SMI 595.79                 Driver Version: 595.79         CUDA Version: 13.2     |
++-----------------------------------------------------------------------------------------+
+"""
+
+    assert parse_cuda_version(output) == "13.2"

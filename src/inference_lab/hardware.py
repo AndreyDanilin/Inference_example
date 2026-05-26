@@ -3,6 +3,7 @@ from __future__ import annotations
 import subprocess
 from dataclasses import dataclass
 from pathlib import Path
+import re
 from typing import Any
 
 import yaml
@@ -75,28 +76,37 @@ def load_hardware_profile(path: Path) -> HardwareProfile:
 
 
 def collect_gpu_facts() -> GpuFacts:
-    command = [
+    query_command = [
         "nvidia-smi",
-        "--query-gpu=name,driver_version,memory.total,cuda_version",
+        "--query-gpu=name,driver_version,memory.total",
         "--format=csv",
     ]
-    completed = subprocess.run(command, check=True, capture_output=True, text=True)
-    return parse_nvidia_smi_csv(completed.stdout)
+    query_completed = _run_nvidia_smi(query_command)
+    banner_completed = _run_nvidia_smi(["nvidia-smi"])
+    return parse_nvidia_smi_csv(
+        query_completed.stdout,
+        cuda_version=parse_cuda_version(banner_completed.stdout),
+    )
 
 
-def parse_nvidia_smi_csv(output: str) -> GpuFacts:
+def parse_nvidia_smi_csv(output: str, cuda_version: str | None = None) -> GpuFacts:
     lines = [line.strip() for line in output.splitlines() if line.strip()]
     if len(lines) < 2:
         raise ValueError("nvidia-smi CSV output must contain a header and one GPU row")
     values = [part.strip() for part in lines[1].split(",")]
-    if len(values) < 4:
-        raise ValueError("nvidia-smi CSV output must contain name, driver, memory, and CUDA version")
+    if len(values) < 3:
+        raise ValueError("nvidia-smi CSV output must contain name, driver, and memory")
     return GpuFacts(
         name=values[0],
         driver_version=values[1],
         total_memory_mib=_parse_mib(values[2]),
-        cuda_version=values[3],
+        cuda_version=cuda_version or (values[3] if len(values) > 3 else "unknown"),
     )
+
+
+def parse_cuda_version(output: str) -> str:
+    match = re.search(r"CUDA Version:\s*([0-9]+(?:\.[0-9]+)*)", output)
+    return match.group(1) if match else "unknown"
 
 
 def hardware_markdown(facts: GpuFacts, profile: HardwareProfile) -> str:
@@ -131,6 +141,16 @@ def hardware_markdown(facts: GpuFacts, profile: HardwareProfile) -> str:
 def _parse_mib(value: str) -> int:
     number = value.replace("MiB", "").strip()
     return int(number)
+
+
+def _run_nvidia_smi(command: list[str]) -> subprocess.CompletedProcess[str]:
+    try:
+        return subprocess.run(command, check=True, capture_output=True, text=True)
+    except FileNotFoundError as exc:
+        raise RuntimeError("nvidia-smi was not found. Install NVIDIA drivers and run this in WSL2/Linux with GPU access.") from exc
+    except subprocess.CalledProcessError as exc:
+        details = (exc.stderr or exc.stdout or "").strip()
+        raise RuntimeError(f"{' '.join(command)} failed with exit {exc.returncode}: {details}") from exc
 
 
 def _mapping(value: Any, name: str) -> dict[str, Any]:
