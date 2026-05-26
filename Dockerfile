@@ -9,16 +9,19 @@ RUN apt-get update \
         ca-certificates \
         curl \
         git \
-        python3 \
-        python3-pip \
-        python3-venv \
+        software-properties-common \
+    && add-apt-repository ppa:deadsnakes/ppa \
+    && apt-get update \
+    && apt-get install -y --no-install-recommends \
+        python3.12 \
+        python3.12-venv \
     && rm -rf /var/lib/apt/lists/*
 
 RUN curl -LsSf https://astral.sh/uv/install.sh | sh
 
 WORKDIR /workspace
 
-COPY pyproject.toml README.md ./
+COPY pyproject.toml README.md .python-version ./
 COPY configs ./configs
 COPY prompts ./prompts
 COPY scripts ./scripts

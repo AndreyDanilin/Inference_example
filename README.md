@@ -33,16 +33,28 @@ Recommended baseline:
 Install uv, then sync the development dependencies:
 
 ```bash
+uv python install 3.12
 uv sync --extra dev
 ```
 
 For the CUDA serving and kernel path:
 
 ```bash
+uv python install 3.12
 uv sync --extra cuda --extra dev
 ```
 
+Use Python 3.10-3.12 for the CUDA path. The repository includes `.python-version` with `3.12` because SGLang serving dependencies are not a good fit for Python 3.13 yet.
+
 On Windows, use WSL2 or Docker for the CUDA path. The unit tests still run without CUDA and skip GPU checks automatically.
+
+If uv already created a Python 3.13 environment, recreate it:
+
+```bash
+rm -rf .venv
+uv python install 3.12
+uv sync --extra cuda --extra dev
+```
 
 ## Launch SGLang
 

@@ -3,7 +3,7 @@ name = "sglang-triton-inference-lab"
 version = "0.1.0"
 description = "CUDA-first SGLang serving and Triton kernel benchmark lab."
 readme = "README.md"
-requires-python = ">=3.10"
+requires-python = ">=3.10,<3.13"
 authors = [{ name = "Inference Lab" }]
 dependencies = [
     "httpx>=0.27.0",
@@ -14,8 +14,7 @@ dependencies = [
 
 [project.optional-dependencies]
 cuda = [
-    "sglang>=0.4.6.post1",
-    "torch>=2.5.0",
+    "sglang[srt]>=0.5.2",
     "triton>=3.1.0; platform_system != 'Windows'",
 ]
 dev = [
