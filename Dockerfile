@@ -9,6 +9,7 @@ RUN apt-get update \
         ca-certificates \
         curl \
         git \
+        libnuma1 \
         software-properties-common \
     && add-apt-repository ppa:deadsnakes/ppa \
     && apt-get update \

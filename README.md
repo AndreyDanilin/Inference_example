@@ -40,6 +40,8 @@ uv sync --extra dev
 For the CUDA serving and kernel path:
 
 ```bash
+sudo apt-get update
+sudo apt-get install -y libnuma1
 uv python install 3.12
 uv sync --extra cuda --extra dev
 ```

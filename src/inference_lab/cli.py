@@ -11,6 +11,10 @@ from rich.console import Console
 from inference_lab.config import load_benchmark_config, load_sglang_config, parse_int_list
 from inference_lab.reports import write_json_report, write_markdown_report
 from inference_lab.sglang_client import SGLangBenchmarkOptions, run_sglang_benchmark
+from inference_lab.system_requirements import (
+    format_missing_library_help,
+    missing_sglang_runtime_libraries,
+)
 
 console = Console()
 
@@ -63,6 +67,11 @@ def build_parser() -> argparse.ArgumentParser:
 
 
 def serve_sglang(args: argparse.Namespace) -> int:
+    missing_libraries = missing_sglang_runtime_libraries()
+    if missing_libraries:
+        console.print(f"[red]{format_missing_library_help(missing_libraries)}[/red]")
+        return 2
+
     config = load_sglang_config(args.config)
     if args.model:
         config = _replace_dataclass(config, model_path=args.model)
