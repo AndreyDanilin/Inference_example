@@ -1,0 +1,25 @@
+{
+  "metadata": {
+    "repeats": 50,
+    "warmup": 10
+  },
+  "name": "triton-kernels",
+  "results": [
+    {
+      "kernel": "matmul",
+      "max_abs_error": 0.007812,
+      "shape": "512x512 @ 512x512 fp16",
+      "speedup": 1.2,
+      "torch_ms": 0.18,
+      "triton_ms": 0.15
+    },
+    {
+      "kernel": "rmsnorm",
+      "max_abs_error": 0.003906,
+      "shape": "1024x2048 fp16",
+      "speedup": 1.7308,
+      "torch_ms": 0.09,
+      "triton_ms": 0.052
+    }
+  ]
+}

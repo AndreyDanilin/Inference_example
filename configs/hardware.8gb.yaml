@@ -1,0 +1,19 @@
+name: 8gb-cuda
+min_vram_gb: 8
+default_model: Qwen/Qwen3-0.6B
+stretch_model: Qwen/Qwen3-1.7B
+notes:
+  - Keep Qwen3-0.6B as the README default for reliable 8 GB runs.
+  - Treat Qwen3-1.7B as a stretch profile after checking real free VRAM.
+  - Lower max_total_tokens or mem_fraction_static first when SGLang reports OOM.
+sglang:
+  max_total_tokens: 4096
+  max_prefill_tokens: 2048
+  context_length: 4096
+  mem_fraction_static: 0.75
+  concurrency: [1, 2, 4, 8]
+triton:
+  matmul_shape: 512x512x512-fp16
+  rmsnorm_shape: 1024x2048-fp16
+  warmup: 10
+  repeats: 50

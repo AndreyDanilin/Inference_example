@@ -1,0 +1,25 @@
+{
+  "measurements": [],
+  "metadata": {
+    "base_url": "http://127.0.0.1:30000/v1",
+    "max_tokens": 128,
+    "model": "Qwen/Qwen3-0.6B",
+    "stream": true
+  },
+  "name": "sglang",
+  "summaries": [
+    {
+      "concurrency": 1,
+      "error_count": 0,
+      "mean_output_tokens": 56.0,
+      "mean_tokens_per_s": 78.4,
+      "p50_latency_s": 0.72,
+      "p50_ttft_s": 0.13,
+      "p95_latency_s": 0.91,
+      "p95_ttft_s": 0.18,
+      "scenario": "short",
+      "successful_requests": 8,
+      "total_requests": 8
+    }
+  ]
+}

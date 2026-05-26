@@ -1,0 +1,9 @@
+benchmark:
+  concurrency: [1, 4, 8]
+  max_tokens: 128
+  warmup_requests: 2
+  requests_per_concurrency: 8
+  prompt_file: prompts/chat_prompts.yaml
+  timeout_s: 120
+  temperature: 0.2
+  stream: true

@@ -1,0 +1,13 @@
+server:
+  model_path: Qwen/Qwen3-1.7B
+  host: 0.0.0.0
+  port: 30000
+  reasoning_parser: qwen3
+  log_level: info
+  mem_fraction_static: 0.82
+  max_total_tokens: 3072
+  max_prefill_tokens: 1536
+  context_length: 4096
+  enable_metrics: true
+  extra_args:
+    - --trust-remote-code

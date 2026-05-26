@@ -1,0 +1,18 @@
+services:
+  inference-lab:
+    build: .
+    image: sglang-triton-inference-lab:latest
+    ports:
+      - "30000:30000"
+    volumes:
+      - hf-cache:/root/.cache/huggingface
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: 1
+              capabilities: [gpu]
+
+volumes:
+  hf-cache:

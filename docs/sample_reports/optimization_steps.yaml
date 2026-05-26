@@ -1,0 +1,22 @@
+steps:
+  - name: Baseline
+    description: Untuned single-request serving baseline.
+    tokens_per_second: 42.5
+    p95_latency_s: 2.85
+    p50_ttft_s: 0.42
+    notes: Replace with the first measured run on your GPU.
+  - name: SGLang serving
+    description: OpenAI-compatible SGLang server with streaming benchmark path.
+    tokens_per_second: 71.8
+    p95_latency_s: 2.10
+    p50_ttft_s: 0.31
+  - name: 8GB tuned profile
+    description: VRAM-aware max_total_tokens, max_prefill_tokens, and mem_fraction_static.
+    tokens_per_second: 96.4
+    p95_latency_s: 1.64
+    p50_ttft_s: 0.24
+  - name: Concurrency tuned
+    description: Best stable concurrency from the 1,2,4,8 sweep.
+    tokens_per_second: 132.7
+    p95_latency_s: 1.38
+    p50_ttft_s: 0.19

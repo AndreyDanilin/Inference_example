@@ -1,0 +1,11 @@
+.venv/
+__pycache__/
+.pytest_cache/
+.ruff_cache/
+*.py[cod]
+dist/
+build/
+*.egg-info/
+
+# Generated benchmark outputs are ignored by default; curated samples live under docs/sample_reports.
+reports/

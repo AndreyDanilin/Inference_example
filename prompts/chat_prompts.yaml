@@ -1,0 +1,25 @@
+prompts:
+  - name: short-no-thinking
+    scenario: short
+    messages:
+      - role: system
+        content: You are concise. Answer without revealing chain of thought.
+      - role: user
+        content: /no_think Summarize continuous batching in one sentence.
+  - name: short-thinking
+    scenario: short
+    messages:
+      - role: user
+        content: /think What is the practical benefit of KV cache reuse for serving LLMs?
+  - name: long-systems
+    scenario: long
+    messages:
+      - role: system
+        content: You are an inference systems engineer. Be precise and practical.
+      - role: user
+        content: /no_think Compare static batching, dynamic batching, and continuous batching for an LLM serving stack. Include latency and throughput tradeoffs.
+  - name: long-debug
+    scenario: long
+    messages:
+      - role: user
+        content: /think A Qwen3 server on an 8 GB GPU hits OOM at concurrency 8. List the first five settings you would inspect.
